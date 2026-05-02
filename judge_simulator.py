@@ -27,7 +27,7 @@ BOT_URL = "http://localhost:8080"
 LLM_PROVIDER = "openrouter"
 
 # Your API key (paste your key here)
-LLM_API_KEY = "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"
+LLM_API_KEY = ""
 
 # Model to use (leave empty for default, or specify like "gpt-4o", "claude-3-5-sonnet-20241022", etc.)
 LLM_MODEL = "gpt-4o-mini"  # <-- Optional: specify model or leave empty for default

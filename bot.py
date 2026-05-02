@@ -86,6 +86,10 @@ class MetadataResponse(BaseModel):
     submitted_at: str
 
 
+@app.get("/")
+def root():
+    return {"status": "ok", "service": "Vera Bot", "version": "1.0.0"}
+
 # Endpoint 1: GET /v1/healthz
 @app.get("/v1/healthz", response_model=HealthResponse)
 def healthz():

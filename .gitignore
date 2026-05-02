@@ -1,0 +1,7 @@
+.env
+__pycache__/
+*.pyc
+test_tick.py
+test_direct.py
+test_push.py
+test_api.py.env 

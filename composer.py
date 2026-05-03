@@ -176,7 +176,8 @@ RULES (never break):
 8. cta field must be STRING: "yes_stop" or "open_ended" or "none"
 9. For research_digest: cite exact journal, page number, stat, sample size.
 10. For perf_dip: mention exact dropped metric vs peer median.
-11. For recall_due: mention patient name, last visit, specific service.
+11. For regulation_change: mention exact regulation authority name, old value/limit, new value/limit, effective deadline date, and exactly what the merchant must do to comply. Example: DCI ne IOPA dose limit 1.5 mSv se 1.0 mSv kar diya hai, effective Dec 15. E-speed film ya RVG sensors comply karte hain, D-speed nahi. Apna X-ray setup audit karo.
+12. For recall_due: mention patient name, last visit, specific service.
 
 OUTPUT: Raw JSON only. No markdown. No backticks.
 {"body": "...", "cta": "yes_stop", "send_as": "vera", "rationale": "..."}"""

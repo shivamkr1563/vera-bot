@@ -11,7 +11,7 @@ resp2 = requests.post(
     json={
         "scope": "merchant",
         "context_id": "test_001",
-        "version": 1,
+        "version": 99,
         "payload": {
             "merchant_id": "test_001",
             "category_slug": "dentists",
@@ -38,7 +38,7 @@ cat = json.loads((DATASET_DIR / "categories" / "dentists.json").read_text())
 requests.post(f"{BOT_URL}/v1/context", json={
     "scope": "category",
     "context_id": "dentists",
-    "version": 10,
+    "version": 99,
     "payload": cat,
     "delivered_at": "2026-05-03T00:00:00Z"
 })
@@ -49,7 +49,7 @@ m = merchants[0]
 requests.post(f"{BOT_URL}/v1/context", json={
     "scope": "merchant",
     "context_id": m["merchant_id"],
-    "version": 10,
+    "version": 99,
     "payload": m,
     "delivered_at": "2026-05-03T00:00:00Z"
 })
@@ -60,7 +60,7 @@ t = triggers[0]
 requests.post(f"{BOT_URL}/v1/context", json={
     "scope": "trigger",
     "context_id": t["id"],
-    "version": 10,
+    "version": 99,
     "payload": t,
     "delivered_at": "2026-05-03T00:00:00Z"
 })

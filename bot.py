@@ -114,6 +114,38 @@ def healthz():
         contexts_loaded=contexts_by_scope
     )
 
+@app.get("/v1/debug")
+def debug():
+    import os
+    import requests as req
+    key = os.getenv("OPENROUTER_API_KEY", "NOT_FOUND")
+    
+    # Test API call directly
+    try:
+        r = req.post(
+            "https://openrouter.ai/api/v1/chat/completions",
+            headers={
+                "Authorization": f"Bearer {key}",
+                "Content-Type": "application/json"
+            },
+            json={
+                "model": "anthropic/claude-sonnet-4-5",
+                "messages": [{"role": "user", "content": "Say hi"}],
+                "max_tokens": 10
+            },
+            timeout=10
+        )
+        api_status = r.status_code
+        api_response = r.json()
+    except Exception as e:
+        api_status = "error"
+        api_response = str(e)
+    
+    return {
+        "key_prefix": key[:15],
+        "api_status": api_status,
+        "api_response": api_response
+    }
 
 # Endpoint 2: GET /v1/metadata
 @app.get("/v1/metadata", response_model=MetadataResponse)
@@ -269,6 +301,10 @@ def reply(request: ReplyRequest):
     """Handle customer reply in a conversation."""
     conversation_id = request.conversation_id
     
+    # Extract from_role and message early
+    from_role = request.from_role or "merchant"
+    message = request.message or request.body or ""
+    
     # Get conversation or create temporary one for unknown conversations
     if conversation_id not in conversations:
         # Create temporary conversation for this message
@@ -282,12 +318,26 @@ def reply(request: ReplyRequest):
     
     conversation = conversations[conversation_id]
     
-    # Extract message from either "message" or "body" field
-    message = request.message or request.body or ""
+    # Handle customer responses with keyword matching
+    if from_role == "customer":
+        if any(word in message.lower() for word in ["yes", "book", "confirm", "please", "ok", "sure"]):
+            return ReplyAction(
+                action="send",
+                body="Confirmed! Your appointment is booked. See you then!",
+                cta="none",
+                rationale="Customer confirmed booking"
+            )
+        else:
+            return ReplyAction(
+                action="send",
+                body="Thanks! Is there anything else you need help with?",
+                cta="none",
+                rationale="Customer reply acknowledged"
+            )
     
     # Add message to turns
     turn = {
-        "from": request.from_role,
+        "from": from_role,
         "body": message,
         "received_at": request.received_at,
         "turn_number": request.turn_number

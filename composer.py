@@ -263,8 +263,8 @@ def handle_reply_turn(
     
     # 1. CHECK AUTO-REPLY FIRST
     if is_auto_reply(message):
-        if auto_reply_count >= 3:
-            # End conversation after 3 auto-replies detected
+        if auto_reply_count >= 1:
+            # End conversation after 1 auto-reply detected
             return {
                 "action": "end",
                 "body": None,
